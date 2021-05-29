@@ -1,5 +1,7 @@
 import sys
 import random
+import time
+import os
 
 def getValid_ps(ps, maps, cardinals):
     validps = []
@@ -94,7 +96,7 @@ def applyTransition(startnode, endnode, patternmatrix):
 
 def transitionloci(maps, cardinal, valid_ps):
     eg = valid_ps[random.randint(0,len(valid_ps)-1)]
-    print(eg)
+    #print(eg)
     pattern_matrix = [[0 for i in range(11)] for j in range(11)]
     matrix_pts = []
     for i in eg:
@@ -102,22 +104,26 @@ def transitionloci(maps, cardinal, valid_ps):
         col = cardinals[i]*5
         matrix_pts.append([row, col])
 
-    print(matrix_pts)
+    #print(matrix_pts)
     for i in range(len(matrix_pts) - 1):
         applyTransition(matrix_pts[i], matrix_pts[i+1], pattern_matrix)
+        time.sleep(0.5)
+        os.system('clear')
+        print()
         for i in pattern_matrix:
             for j in i:
                 if j == 0:
                     print(" ", end=" ")
                 else:
                     print("*", end=" ")
-
             print()
+
        
 
         print()
         print()
-
+        time.sleep(1)
+    print(eg)
 
 
 perms = []

@@ -118,47 +118,7 @@ def transitionloci(maps, cardinal, valid_ps):
         print()
         print()
 
-"""
-For final printing
-    for i in pattern_matrix:
-        for j in i:
-            if j == 0:
-                print(" ", end=" ")
-            else:
-                print("*", end=" ")
-        print()
-"""    
 
-#replaced by transition loci
-"""
-def getPattern(valid_ps):
-    eg = valid_ps[random.randint(0,len(valid_ps)-1)]
-    pattern_matrix = [[0,0,0],[0,0,0],[0,0,0]]
-
-    matrix_pts = []
-    for i in eg:
-        row = maps[i]
-        col = cardinals[i]
-        matrix_pts.append([row, col])
-        pattern_matrix[row][col] = 1
-
-    #print(eg)
-    #print(matrix_pts)
-
-    for i in range(len(pattern_matrix)):
-        for j in range(len(pattern_matrix[i])):
-            if pattern_matrix[i][j] == 0:
-                pattern_matrix[i][j] = " "
-            else:
-                pattern_matrix[i][j] = "*"
-
-
-    for i in pattern_matrix:
-        for j in i:
-            print(j, end=" ")
-        print()
-
-"""
 
 perms = []
 num = 0

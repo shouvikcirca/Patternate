@@ -1,4 +1,4 @@
-# PatternPermute
+# Patternate
 Want screenlock pattern ideas for your device ? Try these out
 
 

@@ -1,47 +1,175 @@
+import sys
 import random
 
-def checkVerticalValidity(current, previous, maps):
-    if maps[previous] == - 1:
-        return True
-    if maps[previous] < maps[current] - 1:
-        return False
-    if maps[previous] > maps[current] + 1:
-        return False
+def getValid_ps(ps, maps, cardinals):
+    validps = []
+    for p in ps:
+        valid = 1
+        for i in range(len(p) - 1):
+            #print(p[i])
+            if (maps[p[i]] != maps[p[i+1]]) and (   (abs(maps[p[i]] - maps[p[i+1]]) > 1) or (abs(cardinals[p[i]] - cardinals[p[i+1]]) >1 )  ):
+                #print("1")
+                valid = 0
+                break
 
-    if cardinals[previous] > cardinals[current] + 1:
-        return False
+            if (maps[p[i]] == maps[p[i+1]]) and (abs(cardinals[p[i]] - cardinals[p[i+1]]) > 1):
+                #print("3")
+                valid = 0
+                break
+        
+        if valid == 1:
+            validps.append(p)
+    
+    return validps
 
-    if cardinals[previous] < cardinals[current] - 1:
-        return False
 
-    return True
+
+def recursivePerm(currentletters, newString, currlength, desiredlength, perms):
+    if currlength == desiredlength:
+        perms.append(newString)
+        return
+
+    for i in range(len(currentletters)):
+        ce = currentletters[i]
+        newString+=ce
+        del currentletters[i]
+        recursivePerm(currentletters, newString, len(newString), desiredlength, perms)
+        newString = newString[:-1]
+        currentletters.insert(i, ce)
+
+    if currlength == 0:
+        return perms
+
+
+
+def applyTransition(startnode, endnode, patternmatrix):
+    if (startnode[0] == endnode[0]) and(startnode[1] < endnode[1]):
+        i = startnode[0]
+        for j in range(startnode[1], endnode[1]+1):
+            patternmatrix[i][j] = 1
+    elif (startnode[0] == endnode[0]) and(startnode[1] > endnode[1]):
+        i = startnode[0]
+        for j in range(startnode[1], endnode[1]-1, -1):
+            patternmatrix[i][j] = 1
+    elif (startnode[1] == endnode[1]) and(startnode[0] < endnode[0]):
+        j = startnode[1]
+        for i in range(startnode[0], endnode[0]+1):
+            patternmatrix[i][j] = 1
+    elif (startnode[1] == endnode[1]) and(startnode[0] > endnode[0]):
+        j = startnode[1]
+        for i in range(startnode[0], endnode[0]-1, -1):
+            patternmatrix[i][j] = 1
+    elif (startnode[0] > endnode[0]) and(startnode[1] > endnode[1]):
+        j = startnode[1]
+        i = startnode[0]
+        while i>=endnode[0]:
+            patternmatrix[i][j] = 1
+            i-=1
+            j-=1
+    elif (startnode[0] < endnode[0]) and(startnode[1] < endnode[1]):
+        j = startnode[1]
+        i = startnode[0]
+        while i<=endnode[0]:
+            patternmatrix[i][j] = 1
+            i+=1
+            j+=1
+    elif (startnode[0] < endnode[0]) and(startnode[1] > endnode[1]):
+        j = startnode[1]
+        i = startnode[0]
+        while i<=endnode[0]:
+            patternmatrix[i][j] = 1
+            i+=1
+            j-=1
+    elif (startnode[0] > endnode[0]) and(startnode[1] < endnode[1]):
+        j = startnode[1]
+        i = startnode[0]
+        while i>=endnode[0]:
+            patternmatrix[i][j] = 1
+            i-=1
+            j+=1
+
+    
+
+
+
+def transitionloci(eg, maps, cardinal, valid_ps):
+    print(eg)
+    pattern_matrix = [[0 for i in range(11)] for j in range(11)]
+    matrix_pts = []
+    for i in eg:
+        row = maps[i]*5
+        col = cardinals[i]*5
+        matrix_pts.append([row, col])
+
+    print(matrix_pts)
+    for i in range(len(matrix_pts) - 1):
+        applyTransition(matrix_pts[i], matrix_pts[i+1], pattern_matrix)
+
+
+    print()
+    for i in pattern_matrix:
+        for j in i:
+            if j == 0:
+                print(" ", end=" ")
+            else:
+                print("*", end=" ")
+        print()
+    
+
+#replaced by transition loci
+"""
+def getPattern(valid_ps):
+    eg = valid_ps[random.randint(0,len(valid_ps)-1)]
+    pattern_matrix = [[0,0,0],[0,0,0],[0,0,0]]
+
+    matrix_pts = []
+    for i in eg:
+        row = maps[i]
+        col = cardinals[i]
+        matrix_pts.append([row, col])
+        pattern_matrix[row][col] = 1
+
+    #print(eg)
+    #print(matrix_pts)
+
+    for i in range(len(pattern_matrix)):
+        for j in range(len(pattern_matrix[i])):
+            if pattern_matrix[i][j] == 0:
+                pattern_matrix[i][j] = " "
+            else:
+                pattern_matrix[i][j] = "*"
+
+
+    for i in pattern_matrix:
+        for j in i:
+            print(j, end=" ")
+        print()
+
+"""
+
+perms = []
+num = 0
+desiredlength = int(sys.argv[1])+1
+
 
 
 letters = []
 for i in range(97, 97+9):
     letters.append(str(chr(i)))
 
-
 maps = {"-1":-1 ,"a":0,"b":0,"c":0, "d":1, "e":1, "f":1, "g":2, "h":2, "i":2}
-cardinals = {"a":1,"b":2,"c":3, "d":4, "e":5, "f":6, "g":7, "h":8, "i":9}
+cardinals = {"a":0,"b":1,"c":2, "d":0, "e":1, "f":2, "g":0, "h":1, "i":2}
+
+ps = recursivePerm(letters, '', 0, desiredlength, perms)
+valid_ps = getValid_ps(ps, maps, cardinals)
+
+#getPattern(valid_ps) replaced by transitionloci
 
 
-#letters.pop(0)
-print(letters)
+for item in valid_ps:
+    transitionloci(item, maps, cardinals, valid_ps)
+    print()
+    print()
 
 
-
-ns = ''
-previous = "-1"
-current = -1
-while len(ns) < 4:
-    l = random.randint(0,len(letters)-1)
-    current = letters[l]
-    goForward = checkVerticalValidity(current, previous, maps)
-    print(ns, maps[previous], goForward)
-    if goForward:
-        ns+=current
-        letters.pop(l)
-        previous = current
-print(ns)
 

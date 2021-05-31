@@ -49,23 +49,28 @@ def applyTransition(startnode, endnode, patternmatrix):
         i = startnode[0]
         for j in range(startnode[1], endnode[1]+1):
             patternmatrix[i][j] = 1
+            print()
     elif (startnode[0] == endnode[0]) and(startnode[1] > endnode[1]):
         i = startnode[0]
         for j in range(startnode[1], endnode[1]-1, -1):
             patternmatrix[i][j] = 1
+            print()
     elif (startnode[1] == endnode[1]) and(startnode[0] < endnode[0]):
         j = startnode[1]
         for i in range(startnode[0], endnode[0]+1):
             patternmatrix[i][j] = 1
+            print()
     elif (startnode[1] == endnode[1]) and(startnode[0] > endnode[0]):
         j = startnode[1]
         for i in range(startnode[0], endnode[0]-1, -1):
             patternmatrix[i][j] = 1
+            print()
     elif (startnode[0] > endnode[0]) and(startnode[1] > endnode[1]):
         j = startnode[1]
         i = startnode[0]
         while i>=endnode[0]:
             patternmatrix[i][j] = 1
+            print()
             i-=1
             j-=1
     elif (startnode[0] < endnode[0]) and(startnode[1] < endnode[1]):
@@ -73,6 +78,7 @@ def applyTransition(startnode, endnode, patternmatrix):
         i = startnode[0]
         while i<=endnode[0]:
             patternmatrix[i][j] = 1
+            print()
             i+=1
             j+=1
     elif (startnode[0] < endnode[0]) and(startnode[1] > endnode[1]):
@@ -80,6 +86,7 @@ def applyTransition(startnode, endnode, patternmatrix):
         i = startnode[0]
         while i<=endnode[0]:
             patternmatrix[i][j] = 1
+            print()
             i+=1
             j-=1
     elif (startnode[0] > endnode[0]) and(startnode[1] < endnode[1]):
@@ -87,6 +94,7 @@ def applyTransition(startnode, endnode, patternmatrix):
         i = startnode[0]
         while i>=endnode[0]:
             patternmatrix[i][j] = 1
+            print()
             i-=1
             j+=1
 
